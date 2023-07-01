@@ -1,8 +1,20 @@
 const fs = require('fs');
 
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+  fs.readFileSync(
+    `${__dirname}/../dev-data/data/tours-simple.json`
+  )
 );
+
+exports.checkBody = (req, res, next) => {
+  if (!req.body?.name || !req.body?.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing name or price',
+    });
+  }
+  next();
+};
 
 exports.checkID = (req, res, next, val) => {
   console.log(`Checking Tour ID: ${val}`);
@@ -28,7 +40,9 @@ exports.getAllTours = (req, res) => {
 // params are required by default. making optional /:param?
 exports.getTour = (req, res) => {
   const id = +req.params.id;
-  const tour = tours.find((tour) => tour.id === id);
+  const tour = tours.find(
+    (tour) => tour.id === id
+  );
 
   if (!tour) {
     return res.status(404).json({
@@ -47,7 +61,10 @@ exports.getTour = (req, res) => {
 
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id: newId }, req.body);
+  const newTour = Object.assign(
+    { id: newId },
+    req.body
+  );
 
   tours.push(newTour);
 
