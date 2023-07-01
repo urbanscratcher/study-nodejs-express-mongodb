@@ -7,7 +7,7 @@ const tours = JSON.parse(
 );
 
 exports.checkBody = (req, res, next) => {
-  if (!req.body?.name || !req.body?.price) {
+  if (!req.body.name || !req.body.price) {
     return res.status(400).json({
       status: 'fail',
       message: 'Missing name or price',
@@ -40,9 +40,7 @@ exports.getAllTours = (req, res) => {
 // params are required by default. making optional /:param?
 exports.getTour = (req, res) => {
   const id = +req.params.id;
-  const tour = tours.find(
-    (tour) => tour.id === id
-  );
+  const tour = tours.find((t) => t.id === id);
 
   if (!tour) {
     return res.status(404).json({
